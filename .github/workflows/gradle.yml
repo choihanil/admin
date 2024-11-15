@@ -26,8 +26,20 @@ jobs:
       with:
         gradle-version: '8.10.2'
 
-    - name: Build with Gradle Wrapper
-      run: ./gradlew build
+    - name: Grant execute permission for gradlew
+      run: chmod +x ./gradlew
+
+#    - name: Build with Gradle Wrapper
+#      run: ./gradlew build
+#
+#    - name: Run Tests
+#      run: ./gradlew test
+#
+#    - name: Save Build Artifacts
+#      uses: actions/upload-artifact@v3
+#      with:
+#        name: build-results
+#        path: build/libs/
 
   dependency-submission:
 
