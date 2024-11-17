@@ -40,13 +40,16 @@ jobs:
 
     - name: Deploy Docker Container to EC2
       run: |
-        ssh -o StrictHostKeyChecking=no -i ${{ secrets.EC2_SSH_PRIVATE_KEY }} ubuntu@${{ secrets.EC2_SERVER_IP }} << EOF
+        echo "${{ secrets.EC2_SSH_PRIVATE_KEY }}" > ec2_key.pem
+        chmod 600 ec2_key.pem
+        ssh -o StrictHostKeyChecking=no -i ec2_key.pem ubuntu@${{ secrets.EC2_SERVER_IP }} << EOF
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker pull ${{ secrets.DOCKER_REPO }}:latest
           docker stop admin-container || true
           docker rm admin-container || true
           docker run -d --name admin-container -p 8082:8082 ${{ secrets.DOCKER_REPO }}:latest
         EOF
+        rm ec2_key.pem
 
 #    - name: Run Tests
 #      run: ./gradlew test
