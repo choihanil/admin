@@ -38,6 +38,11 @@ jobs:
         docker build -f Dockerfile -t ${{ secrets.DOCKER_REPO }}:latest .
         docker push ${{ secrets.DOCKER_REPO }}:latest
 
+    - name: Run Docker Container
+      run: |
+        docker pull ${{ secrets.DOCKER_REPO }}:latest
+        docker run -d --name admin-container -p 8082:8082 ${{ secrets.DOCKER_REPO }}:latest
+
 #    - name: Run Tests
 #      run: ./gradlew test
 #
