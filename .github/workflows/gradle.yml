@@ -29,15 +29,15 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x ./gradlew
 
+    - name: Build with Gradle Wrapper
+      run: ./gradlew clean build
+
     - name: Docker build & push to docker repo
       run: |
         docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
         docker build -f Dockerfile -t ${{ secrets.DOCKER_REPO }}/directors-dev .
         docker push ${{ secrets.DOCKER_REPO }}/directors-dev
 
-#    - name: Build with Gradle Wrapper
-#      run: ./gradlew build
-#
 #    - name: Run Tests
 #      run: ./gradlew test
 #
