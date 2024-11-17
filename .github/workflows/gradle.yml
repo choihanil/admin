@@ -38,6 +38,7 @@ jobs:
         docker build -f Dockerfile -t ${{ secrets.DOCKER_REPO }}/directors-dev .
         docker push ${{ secrets.DOCKER_REPO }}/directors-dev
 
+
 #    - name: Run Tests
 #      run: ./gradlew test
 #
