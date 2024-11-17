@@ -38,10 +38,15 @@ jobs:
         docker build -f Dockerfile -t ${{ secrets.DOCKER_REPO }}:latest .
         docker push ${{ secrets.DOCKER_REPO }}:latest
 
-    - name: Run Docker Container
+    - name: Deploy Docker Container to EC2
       run: |
-        docker pull ${{ secrets.DOCKER_REPO }}:latest
-        docker run -d --name admin-container -p 8082:8082 ${{ secrets.DOCKER_REPO }}:latest
+        ssh -o StrictHostKeyChecking=no -i ${{ secrets.EC2_SSH_PRIVATE_KEY }} ubuntu@${{ secrets.EC2_SERVER_IP }} << EOF
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker pull ${{ secrets.DOCKER_REPO }}:latest
+          docker stop admin-container || true
+          docker rm admin-container || true
+          docker run -d --name admin-container -p 8082:8082 ${{ secrets.DOCKER_REPO }}:latest
+        EOF
 
 #    - name: Run Tests
 #      run: ./gradlew test
